@@ -75,7 +75,6 @@ end)
 function renderMenu(name, menuName)
 	local _name = name
 	local elements = {}
-	
 
   	table.insert(elements, {label = 'retirer argent', value = 'withdraw_society_money'})
   	table.insert(elements, {label = 'déposer argent',        value = 'deposit_money'})
@@ -98,7 +97,6 @@ function renderMenu(name, menuName)
 						title = 'montant du retrait'
 					},
 					function(data, menu)
-
 						local amount = tonumber(data.value)
 
 						if amount == nil then
@@ -108,13 +106,12 @@ function renderMenu(name, menuName)
 							print(_name)
 							TriggerServerEvent('esx_society:withdrawMoney', _name, amount)
 						end
-
 					end,
+					
 					function(data, menu)
 						menu.close()
 					end
 				)
-
 			end
 
 			if data.current.value == 'deposit_money' then
@@ -125,7 +122,6 @@ function renderMenu(name, menuName)
 						title = 'montant du dépôt'
 					},
 					function(data, menu)
-
 						local amount = tonumber(data.value)
 
 						if amount == nil then
@@ -134,13 +130,12 @@ function renderMenu(name, menuName)
 							menu.close()
 							TriggerServerEvent('esx_society:depositMoney', _name, amount)
 						end
-
 					end,
+					
 					function(data, menu)
 						menu.close()
 					end
 				)
-
 			end
 		end,
 		
