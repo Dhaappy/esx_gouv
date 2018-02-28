@@ -1,8 +1,8 @@
-local gouv = {x=-429.525,y=1109.5,z=327.682}
-local office = {x=3069.9,y=-4632.4,z=16.2}
-local sortie = {x=-80.489,y=-832.529,z=243.386}
+local gouv = {x=112.00,y=-749.50,z=45.75}
+local coord1 = {x=136.169,y=-761.737,z=45.400}
+local coord2 = {x=136.169,y=-761.737,z=241.800}
 
-local accountMoney = {x=-81.883,y=-808.073,z=243.39}
+local accountMoney = {x=148.21,y=-763.302,z=242.150}
 
 local playerJob = ""
 local playerGrade = ""
@@ -31,18 +31,19 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 
-		DrawMarker(1,gouv.x,gouv.y,gouv.z-1,0,0,0,0,0,0,2.001,2.0001,0.5001,0,155,255,200,0,0,0,0)
-		DrawMarker(1,sortie.x,sortie.y,sortie.z-1,0,0,0,0,0,0,2.001,2.0001,0.5001,0,155,255,200,0,0,0,0)
+		DrawMarker(1,coord1.x,coord1.y,coord1.z-1,0,0,0,0,0,0,2.001,2.0001,0.5001,0,155,255,200,0,0,0,0)
+		DrawMarker(1,coord2.x,coord2.y,coord2.z-1,0,0,0,0,0,0,2.001,2.0001,0.5001,0,155,255,200,0,0,0,0)
 
-		if(isNear(gouv)) then
+		if(isNear(coord1)) then
 			if(playerJob == "gouv") then
-				Info("Appuyez sur ~g~E~w~ pour entrer.")
+				Info("Appuyez sur ~INPUT_PICKUP~ pour monter à l'étage.")
 
 				if(IsControlJustPressed(1, 38)) then
-					SetEntityCoords(GetPlayerPed(-1),-75.8466, -826.9893, 243.3859)
+					Citizen.Wait(0)
+					SetEntityCoords(GetPlayerPed(-1),coord2.x,coord2.y,coord2.z)
 				end
 			else
-				Info("Appuyez sur ~g~E~w~ pour sonner.")
+				Info("Appuyez sur ~INPUT_PICKUP~ pour sonner.")
 
 				if(IsControlJustPressed(1, 38)) then
 					TriggerServerEvent("gouv:sendSonnette")
@@ -50,19 +51,20 @@ Citizen.CreateThread(function()
 			end
 		end
 
-		if(isNear(sortie)) then
-			Info("Appuyez sur ~g~E~w~ pour sortir.")
+		if(isNear(coord2)) then
+			Info("Appuyez sur ~INPUT_PICKUP~ pour descendre au rez-de-chaussée.")
 
 			if(IsControlJustPressed(1, 38)) then
-				SetEntityCoords(GetPlayerPed(-1),gouv.x,gouv.y,gouv.z+1)
+				Citizen.Wait(0)
+				SetEntityCoords(GetPlayerPed(-1),coord1.x,coord1.y,coord1.z)
 			end
 		end
 
 		if(playerGrade == "president" and playerJob == "gouv") then
-			DrawMarker(1,accountMoney.x,accountMoney.y,accountMoney.z-1,0,0,0,0,0,0,2.001,2.0001,0.5001,0,155,255,200,0,0,0,0)
+			DrawMarker(1,accountMoney.x,accountMoney.y,accountMoney.z,0,0,0,0,0,0,2.001,2.0001,0.5001,0,155,255,200,0,0,0,0)
 
 			if(isNear(accountMoney)) then
-				Info("Appuyez sur ~g~E~w~ pour ouvrir le coffre.")
+				Info("Appuyez sur ~INPUT_PICKUP~ pour ouvrir le coffre.")
 
 				if(IsControlJustPressed(1, 38)) then
 					renderMenu("gouv", "Gouvernement")
@@ -164,8 +166,8 @@ local stopRequest = false
 RegisterNetEvent("gouv:sendRequest")
 AddEventHandler("gouv:sendRequest", function(name,id)
 	stopRequest = true
-	SendNotification("~b~"..name.." ~w~a sonné à la porte du gouvernement.")
-	SendNotification("~b~F~w~ pour ~g~accepter~w~ / ~b~G~w~ pour ~r~refuser~w~.")
+	SendNotification("~b~"..name.." ~w~a sonné à la porte du gouvernement !")
+	SendNotification("~INPUT_ENTER~ pour ~g~accepter~w~ / ~INPUT_DETONATE~ pour ~r~refuser~w~.")
 
 	stopRequest = false
 	while not stopRequest do
@@ -187,7 +189,7 @@ RegisterNetEvent("gouv:sendStatus")
 AddEventHandler("gouv:sendStatus", function(status)
 	if(status == 1) then
 		SendNotification("~g~Quelqu'un est venu vous ouvrir la porte !")
-		SetEntityCoords(GetPlayerPed(-1),-75.8466, -826.9893, 243.3859)
+		SetEntityCoords(GetPlayerPed(-1),coord2.x,coord2.y,coord2.z)
 	else
 		SendNotification("~r~Personne n'a voulu vous ouvrir la porte.")
 	end
